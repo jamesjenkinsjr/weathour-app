@@ -4,26 +4,27 @@
     "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "serve": "concurrently \"node server/\" \"cd client && npm start\""
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "serve": "concurrently \"node server/\" \"cd client && npm start\""
     },
     "repository": {
-        "type": "git",
-        "url": "git+https://github.com/jamesjenkinsjr/weathour-app.git"
+      "type": "git",
+      "url": "git+https://github.com/jamesjenkinsjr/react-weather.git"
     },
     "author": "",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/jamesjenkinsjr/weathour-app/issues"
+      "url": "https://github.com/jamesjenkinsjr/react-weather/issues"
     },
-    "homepage": "https://github.com/jamesjenkinsjr/weathour-app#readme",
+    "homepage": "https://github.com/jamesjenkinsjr/react-weather#readme",
     "dependencies": {
-        "axios": "^0.18.0",
-        "body-parser": "^1.18.2",
-        "dotenv": "^5.0.0",
-        "express": "^4.16.2"
+      "axios": "^0.18.0",
+      "body-parser": "^1.18.2",
+      "dotenv": "^5.0.0",
+      "express": "^4.16.2"
     },
     "devDependencies": {
-        "concurrently": "^3.5.1"
+      "concurrently": "^3.5.1"
     }
-}
+  }
+  
