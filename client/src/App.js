@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { isObjectEmpty } from './utilities.js';
+import { isArrayEmpty } from './utilities.js';
 import { getWeather } from './services/weather.js';
 import './App.css';
 
@@ -10,7 +10,7 @@ class App extends Component {
       lat: 1,
       long: 1,
       zip: '',
-      hourlyWeather: {},
+      hourlyWeather: [],
       error: null
     }
     this.handleZip = this.handleZip.bind(this);
@@ -77,7 +77,7 @@ class App extends Component {
           <button type="submit">Generate</button>
         </form>
         {this.state.error ? 'Weiners' : ''}
-        {isObjectEmpty(this.state.hourlyWeather) ? 'Weather object is empty right now' : JSON.stringify(this.state.hourlyWeather)}
+        {isArrayEmpty(this.state.hourlyWeather) ? 'Weather array is empty right now' : JSON.stringify(this.state.hourlyWeather)}
       </div>
     );
   }
