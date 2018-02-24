@@ -7,3 +7,7 @@
 Stretch:
 - geolocate for lat and long
 - Be able to enter zip/city, Uue Google Maps API to find city
+
+Create and hourly component and then map over the component for each item in the data array
+
+this.state.hourlyWeather.map(hour, {<Hourly />}) for iterating over data

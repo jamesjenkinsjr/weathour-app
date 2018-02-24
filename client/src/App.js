@@ -50,6 +50,7 @@ class App extends Component {
       });
   }
 
+
   handleSubmitZip(e) {
     e.preventDefault();
     const weather = this.state.hourlyWeather + 1;
@@ -59,6 +60,7 @@ class App extends Component {
     });
     alert('eventually zip results');
   }
+  
   
   render() {
     return (
