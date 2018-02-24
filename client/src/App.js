@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { isObjectEmpty } from './utilities.js';
+import { getWeather } from './services/weather.js';
 import './App.css';
 
 class App extends Component {
@@ -36,11 +37,17 @@ class App extends Component {
 
   handleSubmitCoordinates(e) {
     e.preventDefault();
-    const weather = this.state.hourlyWeather + 1;
-    this.setState({
-      hourlyWeather: weather
-    });
-    alert('eventually latitude and longitude');
+    getWeather(this.state.lat, this.state.long)
+      .then(response => {
+        const hourlyWeather = response.data.hourly.data;
+        console.log(hourlyWeather);
+        this.setState({hourlyWeather: hourlyWeather});
+      })
+      .catch(error => {
+        console.log(error);
+        this.setState({
+          error: "Something is awry"});
+      });
   }
 
   handleSubmitZip(e) {
@@ -70,7 +77,7 @@ class App extends Component {
           <button type="submit">Generate</button>
         </form>
         {this.state.error ? 'Weiners' : ''}
-        {isObjectEmpty(this.state.hourlyWeather) ? 'Weather object is empty right now' : <p>Hunka Hunka burnin' love</p> }
+        {isObjectEmpty(this.state.hourlyWeather) ? 'Weather object is empty right now' : JSON.stringify(this.state.hourlyWeather)}
       </div>
     );
   }
