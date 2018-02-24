@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { isObjectEmpty } from './utilities.js';
 import './App.css';
 
 class App extends Component {
@@ -34,10 +35,21 @@ class App extends Component {
   }
 
   handleSubmitCoordinates(e) {
+    e.preventDefault();
+    const weather = this.state.hourlyWeather + 1;
+    this.setState({
+      hourlyWeather: weather
+    });
     alert('eventually latitude and longitude');
   }
 
   handleSubmitZip(e) {
+    e.preventDefault();
+    const weather = this.state.hourlyWeather + 1;
+
+    this.setState({
+      hourlyWeather: weather
+    });
     alert('eventually zip results');
   }
   
@@ -57,6 +69,8 @@ class App extends Component {
           <label>Zip Code <input type="number" placeholder="ex. 90210" value={this.state.zip} onChange={(e) => {this.handleZip(e)}}/></label>
           <button type="submit">Generate</button>
         </form>
+        {this.state.error ? 'Weiners' : ''}
+        {isObjectEmpty(this.state.hourlyWeather) ? 'Weather object is empty right now' : <p>Hunka Hunka burnin' love</p> }
       </div>
     );
   }
