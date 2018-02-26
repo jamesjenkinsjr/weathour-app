@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { isArrayEmpty } from './utilities.js';
+import { parseDatetime } from './utilities.js';
 import { getWeather } from './services/weather.js';
+import Images from './images';
 import './App.css';
 
 class App extends Component {
@@ -79,20 +81,24 @@ class App extends Component {
           <button type="submit">Generate</button>
         </form>
         {this.state.error ? 'Weiners' : ''}
-        {isArrayEmpty(this.state.hourlyWeather) ? 'Weather array is empty right now' : <ul>Things below:
+        {isArrayEmpty(this.state.hourlyWeather) ? 'Weather array is empty right now' : 
+        
+        <div>
+          <h2>Hourly Report!</h2>
           { console.log(this.state.hourlyWeather)}
             {this.state.hourlyWeather.map((hour, index) => {
             return(
-          <li key={hour.time}>
-            
+          <div key={hour.time}>
+            <h3>{parseDatetime(hour.time)}</h3>
+            <img src='./images/{hour.icon}.svg' alt="hour.icon"/>
             {hour.summary}
             {hour.temperature}
             
-          </li>
+          </div>
           
             );
         })}
-        </ul> }
+        </div> }
       </div>
     );
   }
