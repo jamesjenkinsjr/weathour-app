@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { isArrayEmpty } from './utilities.js';
 import { parseDatetime } from './utilities.js';
 import { getWeather } from './services/weather.js';
-import Images from './images';
+import { Selection } from './images/index.js'
 import './App.css';
 
 class App extends Component {
@@ -90,7 +90,7 @@ class App extends Component {
             return(
           <div key={hour.time}>
             <h3>{parseDatetime(hour.time)}</h3>
-            <img src='./images/{hour.icon}.svg' alt="hour.icon"/>
+            <img src={Selection(hour.icon)} alt="hour.icon"/>
             {hour.summary}
             {hour.temperature}
             
