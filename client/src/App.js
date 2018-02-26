@@ -61,7 +61,7 @@ class App extends Component {
     alert('eventually zip results');
   }
   
-  
+
   render() {
     return (
       <div>
@@ -79,7 +79,20 @@ class App extends Component {
           <button type="submit">Generate</button>
         </form>
         {this.state.error ? 'Weiners' : ''}
-        {isArrayEmpty(this.state.hourlyWeather) ? 'Weather array is empty right now' : JSON.stringify(this.state.hourlyWeather)}
+        {isArrayEmpty(this.state.hourlyWeather) ? 'Weather array is empty right now' : <ul>Things below:
+          { console.log(this.state.hourlyWeather)}
+            {this.state.hourlyWeather.map((hour, index) => {
+            return(
+          <li key={hour.time}>
+            
+            {hour.summary}
+            {hour.temperature}
+            
+          </li>
+          
+            );
+        })}
+        </ul> }
       </div>
     );
   }
