@@ -10,7 +10,7 @@ import wind from './wind.svg';
 import fog from './fog.svg';
 import notAvailable from './not-available.svg';
 
-const selection = (name) => {
+export const selection = (name) => {
     switch(name) {
         case 'rain': 
             return rain;
@@ -36,4 +36,3 @@ const selection = (name) => {
             return notAvailable;
     }
 }
-export default Selection;

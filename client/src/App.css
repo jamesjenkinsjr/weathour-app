@@ -1,0 +1,15 @@
+.icon {
+    width: 128px
+}
+
+.hour-cell {
+    border: 1px solid black;
+    display: inline-grid;
+    width: 150px;
+    height: 300px;
+}
+.container {
+    overflow-x: scroll;
+    max-height: 300px;
+    max-width: 500px;
+}

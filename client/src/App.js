@@ -1,25 +1,26 @@
-import React, { Component } from 'react';
-import { isArrayEmpty } from './utilities.js';
-import { parseDatetime } from './utilities.js';
-import { getWeather } from './services/weather.js';
-import { Selection } from './images/index.js'
-import './App.css';
+import React, { Component } from "react";
+import { isArrayEmpty } from "./utilities.js";
+import { parseDatetime } from "./utilities.js";
+import { getWeather } from "./services/weather.js";
+import { selection } from "./images";
+import "./App.css";
 
 class App extends Component {
-  constructor(){
+  constructor() {
     super();
     this.state = {
       lat: 1,
       long: 1,
-      zip: '',
+      zip: "",
       hourlyWeather: [],
       error: null
-    }
+    };
     this.handleZip = this.handleZip.bind(this);
     this.handleSubmitCoordinates = this.handleSubmitCoordinates.bind(this);
     this.handleSubmitZip = this.handleSubmitZip.bind(this);
     this.handleLat = this.handleLat.bind(this);
     this.handleLong = this.handleLong.bind(this);
+    this.findLocation = this.findLocation.bind(this);
   }
   handleZip(e) {
     this.setState({
@@ -43,15 +44,15 @@ class App extends Component {
       .then(response => {
         const hourlyWeather = response.data.hourly.data;
         console.log(hourlyWeather);
-        this.setState({hourlyWeather: hourlyWeather});
+        this.setState({ hourlyWeather: hourlyWeather });
       })
       .catch(error => {
         console.log(error);
         this.setState({
-          error: "Something is awry"});
+          error: "Something is awry"
+        });
       });
   }
-
 
   handleSubmitZip(e) {
     e.preventDefault();
@@ -60,45 +61,113 @@ class App extends Component {
     this.setState({
       hourlyWeather: weather
     });
-    alert('eventually zip results');
+    alert("eventually zip results");
   }
-  
+  findLocation(e) {
+    e.preventDefault();
+    console.log("I am clicked");
+    var startPos;
+    var geoSuccess = function(position) {
+      startPos = position;
+      const geoLat = startPos.coords.latitude;
+      const geoLong = startPos.coords.longitude;
+      navigator.geolocation.getCurrentPosition(geoSuccess);
+      this.setState({
+        lat: geoLat,
+        long: geoLong
+      });
+    };
+  }
 
   render() {
     return (
       <div>
         <div className="header">
+          {console.log(navigator.geolocation)}
           <h1>Hourly Weather</h1>
-          <p>Enter your lattitude and longitude, or zip code, below to retrieve an hourly outlook on weather in your area!</p>
+          <p>
+            Enter your lattitude and longitude, or use geolocation, below to
+            retrieve an hourly outlook on weather in your area!
+          </p>
         </div>
-        <form onSubmit={(e) => {this.handleSubmitCoordinates(e)}}>
-          <label>Latitiude <input type="number" value={this.state.lat} onChange={(e) => this.handleLat(e)}/></label>
-          <label>Longitude <input type="number" value={this.state.long} onChange={(e) => this.handleLong(e)}/></label>
+        <form
+          onSubmit={e => {
+            this.findLocation(e);
+          }}
+        >
+          <button type="submit">Geolocate me!</button>
+        </form>
+        <form
+          onSubmit={e => {
+            this.handleSubmitCoordinates(e);
+          }}
+        >
+          <label>
+            Latitiude{" "}
+            <input
+              id="lat"
+              type="number"
+              value={this.state.lat}
+              onChange={e => this.handleLat(e)}
+            />
+          </label>
+          <label>
+            Longitude{" "}
+            <input
+              id="long"
+              type="number"
+              value={this.state.long}
+              onChange={e => this.handleLong(e)}
+            />
+          </label>
           <button type="submit">Generate</button>
         </form>
-        <form onSubmit={(e) => {this.handleSubmitZip(e)}}>
-          <label>Zip Code <input type="number" placeholder="ex. 90210" value={this.state.zip} onChange={(e) => {this.handleZip(e)}}/></label>
+        <form
+          onSubmit={e => {
+            this.handleSubmitZip(e);
+          }}
+        >
+          <label>
+            Zip Code{" "}
+            <input
+              type="number"
+              placeholder="ex. 90210"
+              value={this.state.zip}
+              onChange={e => {
+                this.handleZip(e);
+              }}
+            />
+          </label>
           <button type="submit">Generate</button>
         </form>
-        {this.state.error ? 'Weiners' : ''}
-        {isArrayEmpty(this.state.hourlyWeather) ? 'Weather array is empty right now' : 
-        
-        <div>
-          <h2>Hourly Report!</h2>
-          { console.log(this.state.hourlyWeather)}
-            {this.state.hourlyWeather.map((hour, index) => {
-            return(
-          <div key={hour.time}>
-            <h3>{parseDatetime(hour.time)}</h3>
-            <img src={Selection(hour.icon)} alt="hour.icon"/>
-            {hour.summary}
-            {hour.temperature}
-            
+        {this.state.error ? "Weiners" : ""}
+        {isArrayEmpty(this.state.hourlyWeather) ? (
+          "Weather array is empty right now"
+        ) : (
+          <div>
+            <h2>Hourly Report!</h2>
+            <div className="container">
+              {console.log(this.state.hourlyWeather)}
+              {this.state.hourlyWeather.map((hour, index) => {
+                return (
+                  <div key={hour.time} className="hour-cell">
+                    <h3>{parseDatetime(hour.time)}</h3>
+                    <br />
+                    <img
+                      src={selection(hour.icon)}
+                      alt="hour.icon"
+                      className="icon"
+                    />
+                    <br />
+                    {hour.summary}
+                    <br />
+                    {Math.round(hour.temperature) + "˙F"}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-          
-            );
-        })}
-        </div> }
+        )}
       </div>
     );
   }
