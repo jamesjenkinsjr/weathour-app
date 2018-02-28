@@ -9,6 +9,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      zipError: null,
       lat: '',
       long: '',
       zip: '',
@@ -46,7 +47,6 @@ class App extends Component {
     getWeather(this.state.lat, this.state.long)
       .then(response => {
         const hourlyWeather = response.data.hourly.data;
-        console.log(hourlyWeather);
         this.setState({ hourlyWeather: hourlyWeather });
       })
       .catch(error => {
@@ -59,21 +59,22 @@ class App extends Component {
 
   handleSubmitZip(e) {
     e.preventDefault();
+    this.setState({isLoading: true});
     getZipForWeather(this.state.zip)
       .then(response => {
         const zipLat = response.data.results[0].geometry.location.lat;
         const zipLong = response.data.results[0].geometry.location.lng;
-        console.log(response.data.results[0].geometry.location);
         this.setState({
           lat: zipLat,
-          long: zipLong
+          long: zipLong,
+          isLoading: false
         });
         this.handleSubmitCoordinates();
       })
       .catch(error => {
         console.log(error);
         this.setState({
-          error: "Something is awry"
+          zipError: "Something is awry"
         });
       })
     }
@@ -83,10 +84,6 @@ class App extends Component {
       isLoading: true,
       geoError: ''
     });
-    console.log("I am clicked");
-    var geoOptions = {
-      timeout: 10 * 1000
-    }
     var geoSuccess = (success) => {
       const geoLat = success.coords.latitude;
       const geoLong = success.coords.longitude;  
@@ -170,14 +167,13 @@ class App extends Component {
           </label>
           <button type="submit">Generate</button>
         </form>
-        {this.state.error ? "Weiners" : ""}
-        {isArrayEmpty(this.state.hourlyWeather) ? (
-          "Weather array is empty right now"
+        {(this.state.zipError || this.state.geoError) ?  alert("Weiners jumpin' jelly gigalos") : ""}
+        {(isArrayEmpty(this.state.hourlyWeather) || this.state.isLoading === true) ? (
+          ""
         ) : (
           <div>
             <h2>Hourly Report!</h2>
             <div className="container">
-              {console.log(this.state.hourlyWeather)}
               {this.state.hourlyWeather.map((hour, index) => {
                 return (
                   <div key={hour.time} className="hour-cell">
