@@ -9,7 +9,10 @@
     height: 300px;
 }
 .container {
+    background-color: cornflowerblue;
     overflow-x: scroll;
-    max-height: 300px;
-    max-width: 500px;
+    
+}
+.zip-width {
+    width: 200px!important;
 }

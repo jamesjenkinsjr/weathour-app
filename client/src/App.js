@@ -4,15 +4,16 @@ import { parseDatetime } from "./utilities.js";
 import { getWeather, getZipForWeather } from "./services/weather.js";
 import { selection } from "./images";
 import "./App.css";
+import "./bootstrap.css";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       zipError: null,
-      lat: '',
-      long: '',
-      zip: '',
+      lat: "",
+      long: "",
+      zip: "",
       hourlyWeather: [],
       geoError: null,
       isLoading: false
@@ -25,11 +26,6 @@ class App extends Component {
     this.findLocation = this.findLocation.bind(this);
   }
   handleZip(e) {
-    if((e.target.value < 10000) && (e.target.value > 999)){
-     e.target.value = '0' + e.target.value;
-    } else if (e.target.value <= 999) {
-      e.target.value = '00' + e.target.value;
-    }
     this.setState({
       zip: +e.target.value
     });
@@ -46,9 +42,9 @@ class App extends Component {
   }
 
   handleSubmitCoordinates(e = null) {
-   if(e) {
-     e.preventDefault();
-   }
+    if (e) {
+      e.preventDefault();
+    }
     getWeather(this.state.lat, this.state.long)
       .then(response => {
         const hourlyWeather = response.data.hourly.data;
@@ -65,7 +61,7 @@ class App extends Component {
 
   handleSubmitZip(e) {
     e.preventDefault();
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
     getZipForWeather(this.state.zip)
       .then(response => {
         const zipLat = response.data.results[0].geometry.location.lat;
@@ -82,17 +78,17 @@ class App extends Component {
         this.setState({
           zipError: "Something is awry"
         });
-      })
-    }
+      });
+  }
   findLocation(e) {
     e.preventDefault();
     this.setState({
       isLoading: true,
-      geoError: ''
+      geoError: ""
     });
-    var geoSuccess = (success) => {
+    var geoSuccess = success => {
       const geoLat = success.coords.latitude;
-      const geoLong = success.coords.longitude;  
+      const geoLong = success.coords.longitude;
       this.setState({
         lat: geoLat,
         long: geoLong,
@@ -100,20 +96,18 @@ class App extends Component {
       });
       this.handleSubmitCoordinates();
     };
-    var geoFail = (failure) => {
+    var geoFail = failure => {
       this.setState({
         isLoading: false,
-        geoError: 'Failed to fetch geolocation at this time!'
+        geoError: "Failed to fetch geolocation at this time!"
       });
-    }
+    };
     navigator.geolocation.getCurrentPosition(geoSuccess, geoFail);
-
-}
-  
+  }
 
   render() {
     return (
-      <div>
+      <div className="container">
         <div className="header">
           <h1>Hourly Weather</h1>
           <p>
@@ -122,63 +116,90 @@ class App extends Component {
           </p>
         </div>
         <div className="forms">
-        <form
-          onSubmit={e => {
-            this.findLocation(e);
-          }}
-        >
-          <button type="submit">Geolocate me!</button>
-          {this.state.isLoading === true ? <p>Loading...</p> : '' }
-          {this.state.geoError ? <p>{this.state.geoError}</p> : ''}  
-        </form>
-        <form
-          onSubmit={e => {
-            this.handleSubmitCoordinates(e);
-          }}
-        >
-          <label>
-            Latitiude{" "}
-            <input
-              id="lat"
-              type="number"
-              value={this.state.lat}
-              onChange={e => this.handleLat(e)}
-            />
-          </label>
-          <label>
-            Longitude{" "}
-            <input
-              id="long"
-              type="number"
-              value={this.state.long}
-              onChange={e => this.handleLong(e)}
-            />
-          </label>
-          <button type="submit">Generate</button>
-        </form>
-        <form
-          onSubmit={e => {
-            this.handleSubmitZip(e);
-          }}
-        >
-          <label>
-            Zip Code{" "}
-            <input
-              type="number"
-              min="00501"
-              max="99500"
-              placeholder="ex. 90210"
-              value={this.state.zip}
-              onChange={e => {
-                this.handleZip(e);
+          <div className="form-group">
+            <form
+              onSubmit={e => {
+                this.handleSubmitCoordinates(e);
               }}
-            />
-          </label>
-          <button type="submit">Generate</button>
-        </form>
+            >
+              <div className="row">
+                <div classname="col">
+                  <input
+                    className="form-control form-control-lg"
+                    placeholder="latitude"
+                    id="lat"
+                    type="number"
+                    value={this.state.lat}
+                    onChange={e => this.handleLat(e)}
+                  />
+                </div>
+                <div clasName="col">
+                  <input
+                    className="form-control form-control-lg"
+                    placeholder="Longitude"
+                    id="long"
+                    type="number"
+                    value={this.state.long}
+                    onChange={e => this.handleLong(e)}
+                  />
+                </div>
+                <button className="btn btn-primary" type="submit">
+                  Generate
+                </button>
+              </div>
+            </form>
+          </div>
+          <div className="form-group">
+            <form
+              onSubmit={e => {
+                this.handleSubmitZip(e);
+              }}
+            >
+              <div className="row">
+                
+                  <input
+                    className="form-control form-control-lg zip-width"
+                    type="number"
+                    min="00501"
+                    max="99500"
+                    placeholder="Zip Code"
+                    value={this.state.zip}
+                    onChange={e => {
+                      this.handleZip(e);
+                    }}
+                  />
+                
+              
+              <button className="btn btn-primary" type="submit">
+                Generate
+              </button>
+              </div>
+            </form>
+          </div>
+          <div className="form-group">
+          <div className="row">
+          <form
+            onSubmit={e => {
+              this.findLocation(e);
+            }}
+          >
+            <button className="btn btn-primary" type="submit">
+              Geolocate me!
+            </button>
+            
+            {this.state.isLoading === true 
+            ? <h3 className="text pt-3">Loading...</h3> 
+            : ""}
+            {this.state.geoError ? <h3>{this.state.geoError}</h3> : ""}
+          </form>
+          </div>
+          </div>
         </div>
-        {(this.state.zipError || this.state.geoError) ?  alert("Weiners jumpin' jelly gigalos") : ""}
-        {(isArrayEmpty(this.state.hourlyWeather) || this.state.isLoading === true) ? (
+        {this.state.zipError || this.state.geoError
+          ? alert("Weiners jumpin' jelly gigalos")
+          : ""}
+        {isArrayEmpty(this.state.hourlyWeather) ||
+        this.state.isLoading === true ? (
           ""
         ) : (
           <div>
