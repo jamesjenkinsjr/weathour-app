@@ -28,7 +28,7 @@ export const selection = (name) => {
             return fog;
         case 'cloudy':
             return cloudy;
-        case 'partly-cloud-day':
+        case 'partly-cloudy-day':
             return partlyCloudyDay;
         case 'partly-cloudy-night':
             return partlyCloudyNight;

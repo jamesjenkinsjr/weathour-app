@@ -52,6 +52,7 @@ class App extends Component {
     getWeather(this.state.lat, this.state.long)
       .then(response => {
         const hourlyWeather = response.data.hourly.data;
+        console.log(hourlyWeather);
         this.setState({ hourlyWeather: hourlyWeather });
       })
       .catch(error => {
@@ -120,6 +121,7 @@ class App extends Component {
             retrieve an hourly outlook on weather in your area!
           </p>
         </div>
+        <div className="forms">
         <form
           onSubmit={e => {
             this.findLocation(e);
@@ -174,6 +176,7 @@ class App extends Component {
           </label>
           <button type="submit">Generate</button>
         </form>
+        </div>
         {(this.state.zipError || this.state.geoError) ?  alert("Weiners jumpin' jelly gigalos") : ""}
         {(isArrayEmpty(this.state.hourlyWeather) || this.state.isLoading === true) ? (
           ""

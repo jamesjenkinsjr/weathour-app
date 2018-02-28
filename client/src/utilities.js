@@ -8,5 +8,4 @@ export const parseDatetime = (seconds) => {
     } else {
         return `${time}`
     }
-    
 }
