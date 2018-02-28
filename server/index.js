@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 
 require('dotenv').config();
-const { API_KEY } = process.env;
+const { API_KEY, GOOG_MAP_KEY } = process.env;
 
 const serverApp = express();
 const port = process.env.PORT || 5000;

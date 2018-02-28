@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { isArrayEmpty } from "./utilities.js";
 import { parseDatetime } from "./utilities.js";
-import { getWeather } from "./services/weather.js";
+import { getWeather, getZipForWeather } from "./services/weather.js";
 import { selection } from "./images";
 import "./App.css";
 
@@ -39,8 +39,10 @@ class App extends Component {
     });
   }
 
-  handleSubmitCoordinates(e) {
-    e.preventDefault();
+  handleSubmitCoordinates(e = null) {
+   if(e) {
+     e.preventDefault();
+   }
     getWeather(this.state.lat, this.state.long)
       .then(response => {
         const hourlyWeather = response.data.hourly.data;
@@ -57,13 +59,24 @@ class App extends Component {
 
   handleSubmitZip(e) {
     e.preventDefault();
-    const weather = this.state.hourlyWeather + 1;
-
-    this.setState({
-      hourlyWeather: weather
-    });
-    alert("eventually zip results");
-  }
+    getZipForWeather(this.state.zip)
+      .then(response => {
+        const zipLat = response.data.results[0].geometry.location.lat;
+        const zipLong = response.data.results[0].geometry.location.lng;
+        console.log(response.data.results[0].geometry.location);
+        this.setState({
+          lat: zipLat,
+          long: zipLong
+        });
+        this.handleSubmitCoordinates();
+      })
+      .catch(error => {
+        console.log(error);
+        this.setState({
+          error: "Something is awry"
+        });
+      })
+    }
   findLocation(e) {
     e.preventDefault();
     this.setState({
@@ -82,6 +95,7 @@ class App extends Component {
         long: geoLong,
         isLoading: false
       });
+      this.handleSubmitCoordinates();
     };
     var geoFail = (failure) => {
       this.setState({
@@ -89,7 +103,8 @@ class App extends Component {
         geoError: 'Failed to fetch geolocation at this time!'
       });
     }
-    navigator.geolocation.getCurrentPosition(geoSuccess, geoFail)
+    navigator.geolocation.getCurrentPosition(geoSuccess, geoFail);
+
 }
   
 
