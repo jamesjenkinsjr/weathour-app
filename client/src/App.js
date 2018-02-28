@@ -9,11 +9,12 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      lat: 1,
-      long: 1,
-      zip: "",
+      lat: '',
+      long: '',
+      zip: '',
       hourlyWeather: [],
-      error: null
+      geoError: null,
+      isLoading: false
     };
     this.handleZip = this.handleZip.bind(this);
     this.handleSubmitCoordinates = this.handleSubmitCoordinates.bind(this);
@@ -65,25 +66,37 @@ class App extends Component {
   }
   findLocation(e) {
     e.preventDefault();
+    this.setState({
+      isLoading: true,
+      geoError: ''
+    });
     console.log("I am clicked");
-    var startPos;
-    var geoSuccess = function(position) {
-      startPos = position;
-      const geoLat = startPos.coords.latitude;
-      const geoLong = startPos.coords.longitude;
-      navigator.geolocation.getCurrentPosition(geoSuccess);
+    var geoOptions = {
+      timeout: 10 * 1000
+    }
+    var geoSuccess = (success) => {
+      const geoLat = success.coords.latitude;
+      const geoLong = success.coords.longitude;  
       this.setState({
         lat: geoLat,
-        long: geoLong
+        long: geoLong,
+        isLoading: false
       });
     };
-  }
+    var geoFail = (failure) => {
+      this.setState({
+        isLoading: false,
+        geoError: 'Failed to fetch geolocation at this time!'
+      });
+    }
+    navigator.geolocation.getCurrentPosition(geoSuccess, geoFail)
+}
+  
 
   render() {
     return (
       <div>
         <div className="header">
-          {console.log(navigator.geolocation)}
           <h1>Hourly Weather</h1>
           <p>
             Enter your lattitude and longitude, or use geolocation, below to
@@ -96,6 +109,8 @@ class App extends Component {
           }}
         >
           <button type="submit">Geolocate me!</button>
+          {this.state.isLoading === true ? <p>Loading...</p> : '' }
+          {this.state.geoError ? <p>{this.state.geoError}</p> : ''}  
         </form>
         <form
           onSubmit={e => {
