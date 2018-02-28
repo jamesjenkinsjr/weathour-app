@@ -25,6 +25,11 @@ class App extends Component {
     this.findLocation = this.findLocation.bind(this);
   }
   handleZip(e) {
+    if((e.target.value < 10000) && (e.target.value > 999)){
+     e.target.value = '0' + e.target.value;
+    } else if (e.target.value <= 999) {
+      e.target.value = '00' + e.target.value;
+    }
     this.setState({
       zip: +e.target.value
     });
@@ -158,6 +163,8 @@ class App extends Component {
             Zip Code{" "}
             <input
               type="number"
+              min="00501"
+              max="99500"
               placeholder="ex. 90210"
               value={this.state.zip}
               onChange={e => {
