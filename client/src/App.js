@@ -107,10 +107,10 @@ class App extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container-custom container-fluid p-5">
         <div className="header">
-          <h1>Hourly Weather</h1>
-          <p>
+          <h1 className="text-white">Hourly Weather</h1>
+          <p className="text-white">
             Enter your lattitude and longitude, or use geolocation, below to
             retrieve an hourly outlook on weather in your area!
           </p>
@@ -202,13 +202,13 @@ class App extends Component {
         this.state.isLoading === true ? (
           ""
         ) : (
-          <div>
-            <h2>Hourly Report!</h2>
-            <div className="container">
+          <div className="container-fluid">
+            <h2 className="text-white text-align-center">Hourly Report!</h2>
+            <div className="row report-row">
               {this.state.hourlyWeather.map((hour, index) => {
                 return (
-                  <div key={hour.time} className="hour-cell">
-                    <h3>{parseDatetime(hour.time)}</h3>
+                  <div key={hour.time} className="col hour-cell mt-3 justify-content-center">
+                    <h3 classname="text-white">{parseDatetime(hour.time)}</h3>
                     <br />
                     <img
                       src={selection(hour.icon)}
