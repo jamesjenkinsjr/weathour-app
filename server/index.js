@@ -1,5 +1,6 @@
 const express = require('express');
 const axios = require('axios');
+const path = require('path');
 
 require('dotenv').config();
 const { API_KEY, GOOG_MAP_KEY } = process.env;
@@ -10,9 +11,9 @@ const port = process.env.PORT || 5000;
 //middleware
 serverApp.use(express.static('client/build'));
 
-serverApp.get('/geocode/json?address=${zip}', function(request, response) {
+serverApp.get('/geocode/:zip', function(request, response) {
     const {zip} = request.params;
-    const url = `http://maps.googleapis.com/maps/api/geocode/json?address=${zip}&${GOOG_MAP_KEY}`;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${zip}&key=${GOOG_MAP_KEY}`;
     axios
         .get(url)
         .then(res => {

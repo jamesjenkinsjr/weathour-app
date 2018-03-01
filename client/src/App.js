@@ -63,23 +63,24 @@ class App extends Component {
     e.preventDefault();
     this.setState({ isLoading: true });
     getZipForWeather(this.state.zip)
+      
       .then(response => {
-        const zipLat = response.data.results[0].geometry.location.lat;
-        const zipLong = response.data.results[0].geometry.location.lng;
+        console.log(response);
+        const hourlyWeather = response.data.hourly.data; 
         this.setState({
-          lat: zipLat,
-          long: zipLong,
+          hourlyWeather: hourlyWeather,
           isLoading: false
-        });
-        this.handleSubmitCoordinates();
+        })
       })
-      .catch(error => {
-        console.log(error);
-        this.setState({
-          zipError: "Something is awry"
-        });
+        .catch(error => {
+          console.log(error);
+          this.setState({
+            error: "Something is awry"
+          });
+
       });
-  }
+    
+    }
   findLocation(e) {
     e.preventDefault();
     this.setState({
@@ -123,7 +124,7 @@ class App extends Component {
               }}
             >
               <div className="row">
-                <div classname="col">
+                <div className="col">
                   <input
                     className="form-control form-control-lg"
                     placeholder="latitude"
@@ -133,7 +134,7 @@ class App extends Component {
                     onChange={e => this.handleLat(e)}
                   />
                 </div>
-                <div clasName="col">
+                <div className="col">
                   <input
                     className="form-control form-control-lg"
                     placeholder="Longitude"
