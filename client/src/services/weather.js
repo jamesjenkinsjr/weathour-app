@@ -5,6 +5,6 @@ export const getWeather = (latitude, longitude) => {
     return axios.get(url);
 }
 export const getZipForWeather = (zip) => {
-    const url = `http://maps.googleapis.com/maps/api/geocode/json?address=${zip}`
+    const url = `/geocode/json?address=${zip}`
     return axios.get(url);
 }
