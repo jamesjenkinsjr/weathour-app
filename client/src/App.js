@@ -63,24 +63,21 @@ class App extends Component {
     e.preventDefault();
     this.setState({ isLoading: true });
     getZipForWeather(this.state.zip)
-      
       .then(response => {
         console.log(response);
-        const hourlyWeather = response.data.hourly.data; 
+        const hourlyWeather = response.data.hourly.data;
         this.setState({
           hourlyWeather: hourlyWeather,
           isLoading: false
-        })
+        });
       })
-        .catch(error => {
-          console.log(error);
-          this.setState({
-            error: "Something is awry"
-          });
-
+      .catch(error => {
+        console.log(error);
+        this.setState({
+          error: "Something is awry"
+        });
       });
-    
-    }
+  }
   findLocation(e) {
     e.preventDefault();
     this.setState({
@@ -157,9 +154,9 @@ class App extends Component {
               }}
             >
               <div className="row">
-                
+                <div className="col">
                   <input
-                    className="form-control form-control-lg zip-width"
+                    className="form-control form-control-lg zip-width pb-2 mb-2"
                     type="number"
                     min="00501"
                     max="99500"
@@ -169,31 +166,35 @@ class App extends Component {
                       this.handleZip(e);
                     }}
                   />
-                
-              
-              <button className="btn btn-primary" type="submit">
-                Generate
-              </button>
+
+                  <button className="btn btn-primary" type="submit">
+                    Generate
+                  </button>
+                  </div>
               </div>
             </form>
           </div>
           <div className="form-group">
-          <div className="row">
-          <form
-            onSubmit={e => {
-              this.findLocation(e);
-            }}
-          >
-            <button className="btn btn-primary" type="submit">
-              Geolocate me!
-            </button>
-            
-            {this.state.isLoading === true 
-            ? <h3 className="text pt-3">Loading...</h3> 
-            : ""}
-            {this.state.geoError ? <h3>{this.state.geoError}</h3> : ""}
-          </form>
-          </div>
+            <form
+              onSubmit={e => {
+                this.findLocation(e);
+              }}
+            >
+              <div className="row">
+              <div className="col">
+                <button className="btn btn-primary" type="submit">
+                  Geolocate me!
+                </button>
+
+                {this.state.isLoading === true ? (
+                  <h3 className="text pt-3">Loading...</h3>
+                ) : (
+                  ""
+                )}
+                {this.state.geoError ? <h3>{this.state.geoError}</h3> : ""}
+              </div>
+              </div>
+            </form>
           </div>
         </div>
         {this.state.zipError || this.state.geoError
@@ -208,8 +209,11 @@ class App extends Component {
             <div className="row report-row">
               {this.state.hourlyWeather.map((hour, index) => {
                 return (
-                  <div key={hour.time} className="col hour-cell mt-3 justify-content-center">
-                    <h3 classname="text-white">{parseDatetime(hour.time)}</h3>
+                  <div
+                    key={hour.time}
+                    className="col hour-cell mt-3 justify-content-center"
+                  >
+                    <h3 className="text-white">{parseDatetime(hour.time)}</h3>
                     <br />
                     <img
                       src={selection(hour.icon)}
